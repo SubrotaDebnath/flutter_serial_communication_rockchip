@@ -4,6 +4,7 @@ import 'constants/navigation/route_generator.dart';
 import 'constants/navigation/routes.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 

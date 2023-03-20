@@ -12,7 +12,8 @@ class _HomeScreenState extends State<HomeScreen> {
   String logData = "";
   String receivedData = "";
   String selectedPort = "Select Port";
-  int selectedBaudRate = SerialCommunication().baudRateList.first;
+  int selectedBaudRate = 9600;
+  // int selectedBaudRate = SerialCommunication().baudRateList.first;
   List<String>? serialList = [];
   DataFormat format = DataFormat.ASCII;
   SerialCommunication serialCommunication = SerialCommunication();
@@ -26,6 +27,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   getSerialList() async {
     serialList = await serialCommunication.getAvailablePorts();
+    if(serialList!.isNotEmpty){
+      for(String m in serialList??[]){
+        print('Serial List : $m');
+      }
+    }else{
+      print('Serial List Empty');
+    }
+
   }
 
   @override
@@ -35,7 +44,29 @@ class _HomeScreenState extends State<HomeScreen> {
   }
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        title: const Text('Serial Communication Example'),
+      ),
+      body: SingleChildScrollView(
+        physics: const NeverScrollableScrollPhysics(),
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            children: [
+              setupButton(context),
+              const Divider(),
+              operations(),
+              const Divider(),
+              sendCommand(),
+              const Divider(),
+              response()
+            ],
+          ),
+        ),
+      ),
+    );
   }
   Future<void> updateSelectPort(StateSetter updateState, String value) async {
     updateState(() {
